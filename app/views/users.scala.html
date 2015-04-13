@@ -1,0 +1,32 @@
+@(users: List[User], userForm: Form[User])
+
+@import helper._
+
+@main("List of Users") {
+
+<h1>@users.size users(s)</h1>
+
+<ul>
+    @users.map { user =>
+    <li>
+        @user.username
+        @user.password
+
+        @form(routes.Application.deleteUser(user.username)) {
+        <input type="submit" value="Delete">
+        }
+    </li>
+    }
+</ul>
+
+<h2>Add a new user</h2>
+
+@form(routes.Application.newUser) {
+
+    @inputText(userForm("username"))
+    @inputPassword(userForm("password"))
+    <input type="submit" value="Create">
+
+    }
+
+}
