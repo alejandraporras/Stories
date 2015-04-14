@@ -1,0 +1,20 @@
+@(user:User, stories: List[Story])
+
+@import helper._
+
+@main("Stories") {
+
+<h1>@stories.size stories(s)</h1>
+
+<ul>
+    @stories.map { story =>
+    <li>
+        @story.title
+
+    </li>
+    }
+</ul>
+<p>
+    <a href='@routes.Application.stories'>Create a new story</a>
+</p>
+}

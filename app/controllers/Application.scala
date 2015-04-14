@@ -1,6 +1,8 @@
 package controllers
 
-import models.{Task, User}
+import java.util.Date
+
+import models.{Story, Task, User}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
@@ -13,7 +15,7 @@ object Application extends Controller {
   def index = Action {
     //Redirect(routes.Application.tasks)
     // We want to redirect to the users page
-    Redirect(routes.Application.users)
+    Redirect(routes.Application.login)
   }
 
   def tasks = Action{
@@ -37,10 +39,10 @@ object Application extends Controller {
 
   //####### USERS
 
-  val userForm =  Form(
+  val userForm: Form[User] =  Form(
     mapping(
-      "username" -> text,
-      "password" -> text
+      "username" -> nonEmptyText,
+      "password" -> nonEmptyText
     )(User.apply)(User.unapply)
   )
 
@@ -48,19 +50,13 @@ object Application extends Controller {
   def users = Action{
     Ok(views.html.users(User.all(), userForm))
   }
-  /*
-  def newUser = Action{
-    User.create("pepe")
-    Ok("USUARIO:S " + User.all().size)
-  }*/
-
 
   def newUser= Action{ implicit request =>
     userForm.bindFromRequest.fold(
       (errors) => BadRequest(views.html.users(User.all, errors)),
       data => {
         User.create(data.username, data.password)
-        Redirect(routes.Application.users)
+        Redirect(routes.Application.login())
       }
     )
   }
@@ -68,6 +64,55 @@ object Application extends Controller {
     User.delete(username)
     Redirect(routes.Application.users)
   }
+
+  val loginForm: Form[(String, String)] = Form(
+    tuple(
+    "username" -> nonEmptyText,
+    "password" -> nonEmptyText
+    )
+  )
+
+  def login=Action{
+    Ok(views.html.login(loginForm))
+  }
+
+  def authenticate = Action{ implicit request =>
+    val (user,pass): (String, String) = loginForm.bindFromRequest.get
+
+    User.all.filter(u => u.username == user && u.password == pass) match {
+
+      case Nil => {
+        Ok(views.html.users(User.all(), userForm))
+      }
+      case users: List[User] =>{
+        val user = users.head
+        Ok(views.html.welcome(user, Story.all))
+      }
+
+
+    }
+
+  }
+  val storyForm: Form[(String, String)] = Form(
+    tuple(
+
+      "title" -> nonEmptyText,
+      "text" -> nonEmptyText
+    )
+  )
+
+  def stories=Action{ implicit request =>
+    Ok(views.html.newstory(storyForm))
+  }
+
+  def makeStory()= Action {implicit request =>
+    val (title,text): (String, String) = storyForm.bindFromRequest.get
+    Story.create(title,User.all().head.username, text, 0 , new Date())
+    Ok(views.html.welcome(User.all().head, Story.all))
+  }
+
+
+
 
 
 }

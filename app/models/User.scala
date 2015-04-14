@@ -9,7 +9,7 @@ import anorm.SqlParser._
 case class User (username: String, password: String)
 
 object User{
-  def all() = DB.withConnection { implicit c =>
+  def all(): List[User] = DB.withConnection { implicit c =>
     SQL("select * from user").as(user *)
 
   }
@@ -27,6 +27,7 @@ object User{
 
     }
   }
+
 
   val user= {
     get[String]("username") ~ get[String]("password") map {

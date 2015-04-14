@@ -1,0 +1,17 @@
+@(form: Form[(String, String)])
+
+@helper.form(routes.Application.makeStory) {
+<h1>Create a new story</h1>
+
+<p>
+
+    Title <input type="title" name="title" value="@form("title").value">
+</p>
+<p>
+    Text <input type="text" name="text" value="@form("text").value">
+</p>
+
+<p>
+    <button type="submit">Submit</button>
+</p>
+}
