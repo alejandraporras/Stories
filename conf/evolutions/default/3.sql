@@ -4,7 +4,7 @@
 
 CREATE SEQUENCE story_id_seq;
 
-CREATE TABLE story (
+CREATE TABLE stories (
     id integer NOT NULL DEFAULT nextval('story_id_seq'),
     title varchar(255),
     author varchar(255),
@@ -15,5 +15,5 @@ CREATE TABLE story (
 
 # --- !Downs
 
-DROP TABLE story;
+DROP TABLE stories;
 DROP SEQUENCE story_id_seq;

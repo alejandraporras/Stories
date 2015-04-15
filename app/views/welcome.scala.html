@@ -5,15 +5,39 @@
 @main("Stories") {
 
 <h1>@stories.size stories(s)</h1>
+<h3 align="right"> @user.username.capitalize</h3>
+<head>
+    <style>
+        table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        }
+        th, td {
+        padding: 5px;
+        }
+    </style>
+</head>
 
-<ul>
+<body>
+
+<table style="width:100%">
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Points</th>
+    </tr>
     @stories.map { story =>
-    <li>
-        @story.title
+    <tr>
+        <td>@story.title</td>
+        <td>@story.author</td>
+        <td>@story.points</td>
 
-    </li>
+    </tr>
     }
-</ul>
+</table>
+
+</body>
+
 <p>
     <a href='@routes.Application.stories'>Create a new story</a>
 </p>

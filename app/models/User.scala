@@ -9,11 +9,13 @@ import anorm.SqlParser._
 case class User (username: String, password: String)
 
 object User{
+
+
   def all(): List[User] = DB.withConnection { implicit c =>
     SQL("select * from user").as(user *)
 
   }
-  def create(username: String, password: String) ={
+  def create(username: String, password: String): Int ={
     DB.withConnection { implicit c =>
       SQL("insert into user values ({username}, {password})").on(
         'username -> username, 'password -> password).executeUpdate()
@@ -33,6 +35,15 @@ object User{
     get[String]("username") ~ get[String]("password") map {
       case username~password => User(username, password)
     }
+  }
+
+  def getByName(username: String): User ={
+    val users = all()
+    users.filter(u => u.username == username).head
+  }
+
+  def isMyStory( id: Long)={
+
   }
 
 

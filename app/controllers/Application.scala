@@ -8,6 +8,9 @@ import play.api.data.Forms._
 import play.api.mvc._
 
 object Application extends Controller {
+
+  var userLogin: Option[User] = None
+
   val taskForm = Form(
     "label" -> nonEmptyText
   )
@@ -75,6 +78,30 @@ object Application extends Controller {
   def login=Action{
     Ok(views.html.login(loginForm))
   }
+/*
+  def authenticate= Action{ implicit request =>
+    loginForm.bindFromRequest.fold(
+      (errors) => {
+
+        Ok(views.html.welcome(User.getByName("default"), Story.all))
+      },
+      data => {
+
+        User.all.filter(u => u.username == data._1 && u.password == data._2) match {
+
+          case Nil => {
+            Ok(views.html.users(User.all(), userForm))
+          }
+          case users: List[User] =>{
+
+            userLogin = Some(users.head)
+            Ok(views.html.welcome(userLogin.get, Story.all))
+          }
+
+        }
+      }
+    )
+  }*/
 
   def authenticate = Action{ implicit request =>
     val (user,pass): (String, String) = loginForm.bindFromRequest.get
@@ -85,14 +112,17 @@ object Application extends Controller {
         Ok(views.html.users(User.all(), userForm))
       }
       case users: List[User] =>{
-        val user = users.head
-        Ok(views.html.welcome(user, Story.all))
+
+        userLogin = Some(users.head)
+        Ok(views.html.welcome(userLogin.get, Story.all))
       }
 
 
     }
 
   }
+
+
   val storyForm: Form[(String, String)] = Form(
     tuple(
 
@@ -107,8 +137,8 @@ object Application extends Controller {
 
   def makeStory()= Action {implicit request =>
     val (title,text): (String, String) = storyForm.bindFromRequest.get
-    Story.create(title,User.all().head.username, text, 0 , new Date())
-    Ok(views.html.welcome(User.all().head, Story.all))
+    Story.create(title,userLogin.get.username, text, 0 , new Date())
+    Ok(views.html.welcome(userLogin.get, Story.all))
   }
 
 
