@@ -2,9 +2,9 @@
 
 @import helper._
 
-    @main("List of Users") {
+@main("List of Users") {
 
-<h1>@users.size users(s)</h1>
+<h1>Users available: @users.size users(s)</h1>
 
 <ul>
     @users.map { user =>
@@ -12,7 +12,7 @@
         @user.username
         @user.password
 
-        @form(routes.Application.deleteUser(user.username)) {
+        @form(routes.UserCtrl.deleteUser(user.username)) {
         <input type="submit" value="Delete">
         }
     </li>
@@ -21,12 +21,12 @@
 
 <h2>Add a new user</h2>
 
-@form(routes.Application.newUser) {
+@form(routes.UserCtrl.newUser) {
 
-    @inputText(userForm("username"))
-    @inputPassword(userForm("password"))
-    <input type="submit" value="Create">
+@inputText(userForm("username"))
+@inputPassword(userForm("password"))
+<input type="submit" value="Create">
 
-    }
+}
 
 }

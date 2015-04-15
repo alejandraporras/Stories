@@ -1,6 +1,6 @@
 @(form: Form[(String, String)])
 
-@helper.form(routes.Application.authenticate) {
+@helper.form(routes.UserCtrl.authenticate) {
 <h1>Sign in</h1>
 
 <p>
@@ -12,7 +12,7 @@
 </p>
 <p>
     <button type="submit">Login</button>
-    <a href='@routes.Application.users'>Sign up</a>
+    <a href='@routes.UserCtrl.users'>Sign up</a>
 </p>
 
 

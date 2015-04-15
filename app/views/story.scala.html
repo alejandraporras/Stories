@@ -1,0 +1,19 @@
+@(story: Story)
+
+
+@import helper._
+
+@main("Story") {
+
+<h1>@story.title</h1>
+<h2>By: @story.author</h2>
+<h3 align="right"> @story.data</h3>
+<p>
+    @story.text
+</p>
+
+<footer><a href='@routes.StoryCtrl.allStories'>Back to stories</a> </footer>
+
+
+
+}

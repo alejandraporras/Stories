@@ -42,9 +42,7 @@ object User{
     users.filter(u => u.username == username).head
   }
 
-  def isMyStory( id: Long)={
 
-  }
 
 
 }

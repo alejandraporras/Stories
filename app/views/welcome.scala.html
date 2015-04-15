@@ -1,7 +1,5 @@
 @(user:User, stories: List[Story])
 
-@import helper._
-
 @main("Stories") {
 
 <h1>@stories.size stories(s)</h1>
@@ -28,9 +26,16 @@
     </tr>
     @stories.map { story =>
     <tr>
-        <td>@story.title</td>
+        <td><a href='@routes.StoryCtrl.story(story.id)'>@story.title</a></td>
         <td>@story.author</td>
-        <td>@story.points</td>
+        @if(user.username != story.author){
+
+             <td><button onclick='@routes.StoryCtrl.stories()'>@story.points</button></td>
+
+
+        } else{
+            <td>@story.points</td>
+        }
 
     </tr>
     }
@@ -39,6 +44,6 @@
 </body>
 
 <p>
-    <a href='@routes.Application.stories'>Create a new story</a>
+    <a href='@routes.StoryCtrl.stories'>Create a new story</a>
 </p>
 }

@@ -1,31 +1,19 @@
-@(tasks: List[Task], taskForm: Form[String])
+@(form: Form[(String, String)])
 
-@import helper._
+@helper.form(routes.UserCtrl.authenticate) {
+<h1>Sign in</h1>
 
-@main("Todo list") {
+<p>
 
-    <h1>@tasks.size task(s)</h1>
+    Username <input type="username" name="username" value="@form("username").value">
+</p>
+<p>
+    Password <input type="password" name="password" placeholder="Password">
+</p>
+<p>
+    <button type="submit">Login</button>
+    <a href='@routes.UserCtrl.users'>Sign up</a>
+</p>
 
-    <ul>
-        @tasks.map { task =>
-        <li>
-            @task.label
-
-            @form(routes.Application.deleteTask(task.id)) {
-            <input type="submit" value="Delete">
-            }
-        </li>
-        }
-    </ul>
-
-    <h2>Add a new task</h2>
-
-    @form(routes.Application.newTask) {
-
-    @inputText(taskForm("label"))
-
-    <input type="submit" value="Create">
-
-    }
 
 }

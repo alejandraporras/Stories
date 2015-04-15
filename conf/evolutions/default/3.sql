@@ -8,7 +8,7 @@ CREATE TABLE stories (
     id integer NOT NULL DEFAULT nextval('story_id_seq'),
     title varchar(255),
     author varchar(255),
-    text varchar(255),
+    text varchar(5000),
     points Integer,
     data Date
 );

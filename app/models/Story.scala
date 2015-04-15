@@ -1,14 +1,15 @@
 package models
 import java.util.Date
 
-import play.api.db.DB
-import play.api.Play.current
-import anorm._
 import anorm.SqlParser._
+import anorm._
+import play.api.Play.current
+import play.api.db.DB
 
-case class Story (id: Long, title: String,  author: String, text: String, points: Integer, data: Date)
+case class Story (id: Long, title: String,  author: String, text: String,var points: Integer, data: Date)
 
 object Story{
+
 
   def all(): List[Story] = {
     DB.withConnection { implicit c =>
@@ -32,10 +33,26 @@ object Story{
     }
   }
 
+  def update (id: Long, points: Integer) ={
+    DB.withConnection { implicit c =>
+      SQL("update stories set points = points where id = {id}").on('id -> id).executeUpdate()
+
+    }
+  }
+
+
+
+
   val story= {
     get[Long]("id") ~ get[String]("title") ~ get[String]("author") ~ get[String]("text") ~ get[Int]("points")~ get[Date]("data") map{
        case id ~ title ~ author ~ text ~ points ~ data  => Story(id, title, author,text,  points, data)
     }
+  }
+
+  def getById(id: Long)={
+    val stories =all().filter(story => story.id == id)
+    stories.head
+
   }
 }
 /*
