@@ -14,10 +14,11 @@ POST    /users                      controllers.UserCtrl.newUser
 POST    /users/:username/delete     controllers.UserCtrl.deleteUser(username: String)
 
 
-POST    /login                      controllers.UserCtrl.authenticate
+#POST    /login                      controllers.UserCtrl.authenticate
+POST    /stories                    controllers.UserCtrl.authenticate
 
-GET     /stories                    controllers.StoryCtrl.stories
-POST    /stories                    controllers.StoryCtrl.makeStory
+GET     /newStory                    controllers.StoryCtrl.showStoryForm
+POST    /storiesUpdated                    controllers.StoryCtrl.makeStory
 GET     /story/:id                  controllers.StoryCtrl.story(id: Long)
 GET     /allstories                 controllers.StoryCtrl.allStories
 

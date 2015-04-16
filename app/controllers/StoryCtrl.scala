@@ -20,7 +20,7 @@ object  StoryCtrl extends Controller{
     )
   )
 
-  def stories=Action{ implicit request =>
+  def showStoryForm=Action{ implicit request =>
     Ok(views.html.newstory(storyForm))
   }
 

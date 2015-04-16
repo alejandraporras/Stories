@@ -1,0 +1,46 @@
+@(user:User, stories: List[Story])
+
+@main("Stories") {
+
+<h1>@stories.size stories(s)</h1>
+<h3 align="right"> @user.username.capitalize</h3>
+<head>
+    <style>
+        table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        }
+        th, td {
+        padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<table style="width:100%">
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Points</th>
+    </tr>
+    @stories.map { story =>
+    <tr>
+        <td><a href='@routes.StoryCtrl.story(story.id)'>@story.title</a></td>
+        <td>@story.author</td>
+        @if(user.username != story.author){
+             <td><button onclick='document.location="@routes.StoryCtrl.incrementPoints(story.id)"'>@story.points</button></td>
+        } else{
+            <td>@story.points</td>
+        }
+
+    </tr>
+    }
+</table>
+
+</body>
+
+<p>
+    <a href='@routes.StoryCtrl.showStoryForm'>Create a new story</a>
+</p>
+}

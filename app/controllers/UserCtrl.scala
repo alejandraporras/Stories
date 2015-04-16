@@ -37,9 +37,6 @@ object UserCtrl {
   }
 
 
-
-
-
   def authenticate = Action{ implicit request =>
     val (user,pass): (String, String) = loginForm.bindFromRequest.get
 
