@@ -6,7 +6,12 @@ import anorm._
 import anorm.SqlParser._
 
 
-case class User (username: String, password: String)
+case class User (username: String, password: String,var stories: List[Story]){
+    def this(username: String, password: String) = this(username, password, List())
+    def getStories(user: User):List[Story] = {
+      Story.all.filter(s=> s.author == user.username)
+    }
+}
 
 object User{
 
@@ -32,8 +37,8 @@ object User{
 
 
   val user= {
-    get[String]("username") ~ get[String]("password") map {
-      case username~password => User(username, password)
+    get[String]("username") ~ get[String]("password")  map {
+      case username~password => new User(username, password)
     }
   }
 
@@ -42,7 +47,15 @@ object User{
     users.filter(u => u.username == username).head
   }
 
+  def addStory(user: User, story: Story): Unit ={
+    println("Adding story..." + user.username + " STORY: " + story.title)
+    user.stories = user.stories.:+(story)
+    println("SIZE:::::::" + user.stories.size)
+  }
 
+  def getStories(user: User):List[Story] = {
+    Story.all.filter(s=> s.author == user.username)
+  }
 
 
 }

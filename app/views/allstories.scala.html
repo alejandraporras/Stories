@@ -4,6 +4,7 @@
 
 <h1>@stories.size stories(s)</h1>
 <h3 align="right"> @user.username.capitalize</h3>
+<h3 align="right"> <a href='@routes.StoryCtrl.myStories(user.username)'>My stories</a></h3>
 <head>
     <style>
         table, th, td {
@@ -42,5 +43,10 @@
 
 <p>
     <a href='@routes.StoryCtrl.showStoryForm'>Create a new story</a>
+
 </p>
+
+<h2>Tengo: @user.getStories(user).size historia(s)</h2>
+
+
 }

@@ -42,7 +42,6 @@ object Story{
 
 
 
-
   val story= {
     get[Long]("id") ~ get[String]("title") ~ get[String]("author") ~ get[String]("text") ~ get[Int]("points")~ get[Date]("data") map{
        case id ~ title ~ author ~ text ~ points ~ data  => Story(id, title, author,text,  points, data)
@@ -55,7 +54,3 @@ object Story{
 
   }
 }
-/*
-
-[MatchError: ~(~(~(~(~(Some(1),Some(dasdasd)),None),Some(dasdassd)),Some(0)),Some(2015-04-14)) (of class anorm.$tilde)]
-*/

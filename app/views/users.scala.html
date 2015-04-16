@@ -1,4 +1,4 @@
-@(users: List[User], userForm: Form[User])
+@(users: List[User], userForm: Form[(String, String)])
 
 @import helper._
 
@@ -23,10 +23,16 @@
 
 @form(routes.UserCtrl.newUser) {
 
-@inputText(userForm("username"))
-@inputPassword(userForm("password"))
-<input type="submit" value="Create">
+<p>
+
+    Username <input type="username" name="username" value="@userForm("username").value">
+</p>
+<p>
+    Password <input type="password" name="password" placeholder="Password">
+</p>
+<p>
+    <button type="submit">Create</button>
+</p>
 
 }
-
 }

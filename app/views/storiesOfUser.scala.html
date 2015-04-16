@@ -1,0 +1,25 @@
+@(user: User)
+
+
+@import helper._
+
+@main("Stories of user") {
+
+<h1>@user.getStories(user).size stories(s)</h1>
+<h3 align="right"> @user.username.capitalize</h3>
+
+
+<body>
+
+
+
+    @user.getStories(user).map { story =>
+    <ul>
+        <li>  <td><a href='@routes.StoryCtrl.story(story.id)'>@story.title</a></td></li>
+    </ul>
+    }
+
+
+</body>
+
+}
