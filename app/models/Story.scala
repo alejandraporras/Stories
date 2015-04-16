@@ -35,7 +35,7 @@ object Story{
 
   def update (id: Long, points: Integer) ={
     DB.withConnection { implicit c =>
-      SQL("update stories set points = points where id = {id}").on('id -> id).executeUpdate()
+      SQL("update stories set points = {points} where id = {id}").on('id -> id, 'points -> points).executeUpdate()
 
     }
   }

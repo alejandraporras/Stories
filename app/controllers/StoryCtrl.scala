@@ -40,9 +40,8 @@ object  StoryCtrl extends Controller{
   }
   def incrementPoints(id: Long) = Action { implicit request =>
     var story = Story.getById(id)
-  println ("ID: " + id)
-    Story.update(id, story.points + 1)
-    Ok(views.html.welcome(Application.userLogin.get, Story.all))
+    Story.update(id,  story.points + 1)
+    Ok(views.html.welcome(userLogin.get, Story.all))
 
   }
 
