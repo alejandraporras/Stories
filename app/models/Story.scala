@@ -6,7 +6,12 @@ import anorm._
 import play.api.Play.current
 import play.api.db.DB
 
-case class Story (id: Long, title: String,  author: String, text: String,var points: Integer, data: Date)
+case class Story (id: Long, title: String,  author: String, text: String,var points: Integer, data: Date, var comments: List[Comment]){
+  def this(id: Long, title: String,  author: String, text: String,  points: Integer, data: Date) = this(id, title, author, text, points, data, List())
+  def getComments(story: Story): List[Comment] ={
+    comments.filter(comment => comment.story == story.id)
+  }
+}
 
 object Story{
 
@@ -44,7 +49,7 @@ object Story{
 
   val story= {
     get[Long]("id") ~ get[String]("title") ~ get[String]("author") ~ get[String]("text") ~ get[Int]("points")~ get[Date]("data") map{
-       case id ~ title ~ author ~ text ~ points ~ data  => Story(id, title, author,text,  points, data)
+       case id ~ title ~ author ~ text ~ points ~ data  => new Story(id, title, author,text,  points, data)
     }
   }
 
@@ -53,4 +58,11 @@ object Story{
     stories.head
 
   }
+
+  def addComment(user: User, story: Story, comment: Comment): Unit ={
+    story.comments = story.comments.:+(comment)
+    println("ADDING COMMENT:" + story.getComments(story).toString())
+
+  }
+
 }

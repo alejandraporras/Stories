@@ -12,6 +12,28 @@
     @story.text
 </p>
 
+<p>
+    Comments: @story.getComments(story).size
+    @story.getComments(story).map { comment =>
+        <ul>
+            <li> @comment.text</a></td></li>
+        </ul>
+        }
+
+</p>
+
+<p>
+    <b>Add a coment</b>
+</p>
+<textarea rows="20" cols="100">
+
+</textarea>
+@form(routes.StoryCtrl.story(story.id)){
+
+<p>
+    <button type="submit">Comment</button>
+</p>
+}
 <footer><a href='@routes.StoryCtrl.allStories'>Back to stories</a> </footer>
 
 

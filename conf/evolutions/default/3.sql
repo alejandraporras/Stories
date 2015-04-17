@@ -1,19 +1,17 @@
- Stories schema
+ storiesrated schema
 
 # --- !Ups
 
-CREATE SEQUENCE story_id_seq;
+CREATE SEQUENCE storiesRated_id_seq;
 
-CREATE TABLE stories (
-    id integer NOT NULL DEFAULT nextval('story_id_seq'),
-    title varchar(255),
-    author varchar(255),
-    text varchar(5000),
-    points Integer,
-    data Date
+CREATE TABLE storiesrated (
+    id integer NOT NULL DEFAULT nextval('storiesRated_id_seq'),
+    author varchar(255) REFERENCES user(username),
+    story integer REFERENCES stories(id),
+
 );
 
 # --- !Downs
 
-DROP TABLE stories;
-DROP SEQUENCE story_id_seq;
+DROP TABLE storiesrated;
+DROP SEQUENCE storiesRated_id_seq;
