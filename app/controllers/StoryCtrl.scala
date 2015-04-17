@@ -30,7 +30,6 @@ object  StoryCtrl extends Controller{
     val idStory: Option[Long] = Story.create(title,userLogin.get.username, text, 0 , new Date())
     val story: Story = Story.getById(idStory.get)
     User.addStory( userLogin.get,story )
-    println("HE AGREGADO: " + userLogin.get.stories.size)
     Ok(views.html.allstories(userLogin.get, Story.all))
   }
 
@@ -43,7 +42,7 @@ object  StoryCtrl extends Controller{
     Ok(views.html.allstories(Application.userLogin.get, Story.all))
   }
   def incrementPoints(id: Long) = Action { implicit request =>
-    var story = Story.getById(id)
+    val story = Story.getById(id)
     Story.update(id,  story.points + 1)
     Ok(views.html.allstories(userLogin.get, Story.all))
 

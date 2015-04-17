@@ -48,9 +48,7 @@ object User{
   }
 
   def addStory(user: User, story: Story): Unit ={
-    println("Adding story..." + user.username + " STORY: " + story.title)
     user.stories = user.stories.:+(story)
-    println("SIZE:::::::" + user.stories.size)
   }
 
   def getStories(user: User):List[Story] = {
