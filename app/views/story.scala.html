@@ -1,4 +1,4 @@
-@(story: Story)
+@(story: Story, formComment: Form[(String)])
 
 
 @import helper._
@@ -21,21 +21,18 @@
         }
 
 </p>
+}
+
+@helper.form(routes.StoryCtrl.makeComment(story.id)) {
+<h1>Create a new story</h1>
 
 <p>
-    <b>Add a coment</b>
-</p>
-<textarea rows="20" cols="100">
-
-</textarea>
-@form(routes.StoryCtrl.story(story.id)){
-
+    Text
+<p>
+    <textarea rows="20" cols="100" name="text" value="@formComment("text").value" >
+    </textarea>
 <p>
     <button type="submit">Comment</button>
 </p>
 }
-<footer><a href='@routes.StoryCtrl.allStories'>Back to stories</a> </footer>
 
-
-
-}

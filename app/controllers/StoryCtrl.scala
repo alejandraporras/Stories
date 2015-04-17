@@ -19,6 +19,25 @@ object  StoryCtrl extends Controller{
     )
   )
 
+  val commentForm: Form[(String)] = Form(
+      "text" -> nonEmptyText
+  )
+
+  def makeComment(idStory: Long)= Action { implicit request =>
+    val textComment = commentForm.bindFromRequest.get
+    val story = Story.getById(idStory)
+
+    val idcomment :Option[Long] = Comment.create(Application.userLogin.get.username, idStory, textComment, new Date())
+    val comment = Comment.getById(idcomment.get)
+
+    Story.addComment(Application.userLogin.get, story, comment)
+
+    println("COMMENTS OF SUB: " +   Story.getById(idStory).comments.toString())
+
+    Ok(views.html.story(story, commentForm))
+  }
+
+
   def showStoryForm=Action{ implicit request =>
     Ok(views.html.newstory(storyForm))
   }
@@ -34,11 +53,8 @@ object  StoryCtrl extends Controller{
   def story(id: Long)= Action {implicit request =>
     val story = Story.getById(id)
 
-    val idcomment :Option[Long] = Comment.create(Application.userLogin.get.username, id, "dasdas", new Date())
-    val comment = Comment.getById(idcomment.get)
-    Story.addComment(Application.userLogin.get, story, comment)
 
-    Ok(views.html.story(story))
+    Ok(views.html.story(story, commentForm))
   }
 
   def allStories() = Action {implicit request =>
