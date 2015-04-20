@@ -9,7 +9,8 @@ CREATE TABLE comments (
     author varchar(255) REFERENCES user(username),
     story integer REFERENCES stories(id),
     text varchar (255),
-    data Date
+    data Date,
+    idParent integer REFERENCES comments(id)
 );
 
 # --- !Downs

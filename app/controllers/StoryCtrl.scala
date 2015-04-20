@@ -27,12 +27,12 @@ object  StoryCtrl extends Controller{
     val textComment = commentForm.bindFromRequest.get
     val story = Story.getById(idStory)
 
-    val idcomment :Option[Long] = Comment.create(Application.userLogin.get.username, idStory, textComment, new Date())
-    val comment = Comment.getById(idcomment.get)
+    val idComment :Option[Long] = Comment.create(Application.userLogin.get.username, idStory, textComment, new Date())
+    val comment = Comment.getById(idComment.get)
 
     Story.addComment(Application.userLogin.get, story, comment)
 
-    println("COMMENTS OF SUB: " +   Story.getById(idStory).comments.toString())
+    //println("COMMENTS OF SUB: " +   story.getComments(story).toString())
 
     Ok(views.html.story(story, commentForm))
   }
@@ -79,5 +79,21 @@ object  StoryCtrl extends Controller{
     Ok(views.html.storiesOfUser(user))
   }
 
+  def comment(idComment : Long, idStory: Long) = Action { implicit request =>
+    val comment: Comment = Comment.getById(idComment)
+    val story = Story.getById(idStory)
+    Ok(views.html.comment(comment, story, commentForm))
+  }
+
+  def replyComment(idComment: Long, idStory: Long) = Action {implicit request =>
+
+    val textComment = commentForm.bindFromRequest.get
+    val commentToAdd: Option[Long]= Comment.create(userLogin.get.username, idStory, textComment, new Date())
+    Comment.addComment(Comment.getById(idComment), Comment.getById(commentToAdd.get))
+    val story = Story.getById(idStory)
+    println("LOS COMMENTS: " + Comment.getById(commentToAdd.get).getComments(Comment.getById(commentToAdd.get)))
+
+    Ok(views.html.story(story, commentForm))
+  }
 
 }

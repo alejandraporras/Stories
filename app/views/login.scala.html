@@ -3,7 +3,7 @@
 @helper.form(routes.UserCtrl.authenticate) {
 
 <h1>Sign in</h1>
-
+<form class="form-signin">
 <p>
 
     Username <input type="username" name="username" value="@form("username").value">
@@ -15,6 +15,6 @@
     <button type="submit">Login</button>
     <a href='@routes.UserCtrl.users'>Sign up</a>
 </p>
-
+</form>
 
 }

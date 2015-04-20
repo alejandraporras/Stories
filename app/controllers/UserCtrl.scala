@@ -6,9 +6,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.Action
 
-/**
- * Created by alejandra.porras on 15/04/15.
- */
+
 object UserCtrl {
 
   val userForm: Form[(String, String)] = Form(

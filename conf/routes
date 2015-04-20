@@ -26,6 +26,10 @@ GET     /allstories                 controllers.StoryCtrl.allStories
 POST    /storiesUpdated/:idStory             controllers.StoryCtrl.makeComment(idStory: Long)
 
 GET     /stories/:id               controllers.StoryCtrl.incrementPoints(id: Long)
+GET     /comment/:idC/:idS                controllers.StoryCtrl.comment(idC: Long, idS:Long)
+POST    /replyComment/:idC/:idS              controllers.StoryCtrl.replyComment(idC: Long, idS:Long)
+
+
 
 GET     /mystories/:username         controllers.StoryCtrl.myStories(username: String)
 

@@ -1,0 +1,24 @@
+@(comment: Comment, story: Story, commentForm: Form[(String)] )
+
+
+@import helper._
+
+@main("Comment") {
+
+<h1>@comment.author</h1>
+<h3 align="right"> @comment.date</h3>
+<p>
+    @comment.text
+</p>
+
+@helper.form(routes.StoryCtrl.replyComment(comment.id, story.id)) {
+
+<textarea rows="15" cols="100" name="text" value="@commentForm("text").value" >
+</textarea>
+<p>
+    <button type="submit">Reply</button>
+</p>
+}
+
+
+}
