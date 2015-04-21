@@ -7,7 +7,7 @@ import play.api.Play.current
 
 
 case class StoryRated (id: Long, author: String, story : Integer)
-object StoryRated{
+object StoryRatedDAO{
 
   def all(): List[StoryRated] = {
     DB.withConnection { implicit c =>
@@ -48,7 +48,7 @@ object StoryRated{
     storiesRated.exists(x=> x.author == user.username && x.story == story.id)
   }
 
-  def storiesRatedOfUser(user: User)={
+  def getStoriesRatedOfUser(user: User)={
       all().filter(s => s.author == user.username)
   }
 

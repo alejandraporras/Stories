@@ -1,7 +1,7 @@
 package controllers
 
 import controllers.Application._
-import models.{Story, User}
+import models.{StoryDAO, User, UserDAO}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.Action
@@ -18,20 +18,20 @@ object UserCtrl {
 
 
   def users = Action{
-    Ok(views.html.users(User.all(), userForm))
+    Ok(views.html.users(UserDAO.all(), userForm))
   }
 
   def newUser= Action{ implicit request =>
     userForm.bindFromRequest.fold(
-      (errors) => BadRequest(views.html.users(User.all, errors)),
+      (errors) => BadRequest(views.html.users(UserDAO.all, errors)),
       data => {
-        User.create(data._1, data._2)
+        UserDAO.create(data._1, data._2)
         Redirect(routes.Application.index())
       }
     )
   }
   def deleteUser(username: String)= Action {
-    User.delete(username)
+    UserDAO.delete(username)
     Redirect(routes.UserCtrl.users)
   }
 
@@ -39,15 +39,15 @@ object UserCtrl {
   def authenticate = Action{ implicit request =>
     val (user,pass): (String, String) = loginForm.bindFromRequest.get
 
-    User.all.filter(u => u.username == user && u.password == pass) match {
+    UserDAO.all.filter(u => u.username == user && u.password == pass) match {
 
       case Nil => {
-        Ok(views.html.users(User.all(), userForm))
+        Ok(views.html.users(UserDAO.all(), userForm))
       }
       case users: List[User] =>{
 
         userLogin = Some(users.head)
-        Ok(views.html.allstories(userLogin.get, Story.all))
+        Ok(views.html.allstories(userLogin.get, StoryDAO.all))
       }
 
 

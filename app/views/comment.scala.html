@@ -11,7 +11,7 @@
     @comment.text
 </p>
 
-@helper.form(routes.StoryCtrl.replyComment(comment.id, story.id)) {
+@helper.form(routes.StoryCtrl.replyComment(comment.id)) {
 
 <textarea rows="15" cols="100" name="text" value="@commentForm("text").value" >
 </textarea>

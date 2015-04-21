@@ -29,7 +29,7 @@
     <tr>
         <td><a href='@routes.StoryCtrl.story(story.id)'>@story.title</a></td>
         <td>@story.author</td>
-        @if(user.username != story.author && !(user.hasRated(user, story))){
+        @if(user.username != story.author && !(user.hasRated(story))){
              <td><button onclick='document.location="@routes.StoryCtrl.incrementPoints(story.id)"'>@story.points</button></td>
         } else{
             <td>@story.points</td>

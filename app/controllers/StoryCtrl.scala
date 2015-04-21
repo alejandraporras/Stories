@@ -3,7 +3,7 @@ package controllers
 import java.util.Date
 
 import controllers.Application._
-import models.{Story, StoryRated, User, Comment}
+import models._
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.{Action, Controller}
@@ -25,12 +25,12 @@ object  StoryCtrl extends Controller{
 
   def makeComment(idStory: Long)= Action { implicit request =>
     val textComment = commentForm.bindFromRequest.get
-    val story = Story.getById(idStory)
+    val story = StoryDAO.getById(idStory)
 
-    val idComment :Option[Long] = Comment.create(Application.userLogin.get.username, idStory, textComment, new Date())
-    val comment = Comment.getById(idComment.get)
+    val idComment :Option[Long] = CommentDAO.create(Application.userLogin.get.username, idStory, textComment, new Date())
+    val comment = CommentDAO.getById(idComment.get)
 
-    Story.addComment(Application.userLogin.get, story, comment)
+    story.addComment(comment)
 
     //println("COMMENTS OF SUB: " +   story.getComments(story).toString())
 
@@ -44,56 +44,62 @@ object  StoryCtrl extends Controller{
 
   def makeStory()= Action {implicit request =>
     val (title,text): (String, String) = storyForm.bindFromRequest.get
-    val idStory: Option[Long] = Story.create(title,userLogin.get.username, text, 0 , new Date())
-    val story: Story = Story.getById(idStory.get)
-    User.addStory( userLogin.get,story )
-    Ok(views.html.allstories(userLogin.get, Story.all))
+    val idStory: Option[Long] = StoryDAO.create(title,userLogin.get.username, text, 0 , new Date())
+    val story: Story = StoryDAO.getById(idStory.get)
+    userLogin.get.addStory(story)
+    //UserDAO.addStory( userLogin.get,story )
+    Ok(views.html.allstories(userLogin.get, StoryDAO.all))
   }
 
   def story(id: Long)= Action {implicit request =>
-    val story = Story.getById(id)
+    val story = StoryDAO.getById(id)
 
 
     Ok(views.html.story(story, commentForm))
   }
 
   def allStories() = Action {implicit request =>
-    Ok(views.html.allstories(Application.userLogin.get, Story.all))
+    Ok(views.html.allstories(Application.userLogin.get, StoryDAO.all))
   }
   def incrementPoints(id: Long) = Action { implicit request =>
 
-    val story = Story.getById(id)
-    if( ! StoryRated.exists(Application.userLogin.get, story)){
+    val story = StoryDAO.getById(id)
+    if( ! StoryRatedDAO.exists(Application.userLogin.get, story)){
 
-      Story.update(id,  story.points + 1)
-      StoryRated.create(userLogin.get.username, id)
-      println(StoryRated.all().toString())
+      StoryDAO.update(id,  story.points + 1)
+      StoryRatedDAO.create(userLogin.get.username, id)
   }
 
-    Ok(views.html.allstories(userLogin.get, Story.all))
+    Ok(views.html.allstories(userLogin.get, StoryDAO.all))
 
   }
 
   def myStories(username: String) =Action {implicit request =>
-    val user = User.getByName(username)
+    val user = UserDAO.getByName(username)
     Ok(views.html.storiesOfUser(user))
   }
 
   def comment(idComment : Long, idStory: Long) = Action { implicit request =>
-    val comment: Comment = Comment.getById(idComment)
-    val story = Story.getById(idStory)
+    val comment: Comment = CommentDAO.getById(idComment)
+    val story = StoryDAO.getById(idStory)
     Ok(views.html.comment(comment, story, commentForm))
   }
 
-  def replyComment(idComment: Long, idStory: Long) = Action {implicit request =>
-
+  def replyComment(idComment: Long) = Action {implicit request =>
     val textComment = commentForm.bindFromRequest.get
-    val commentToAdd: Option[Long]= Comment.create(userLogin.get.username, idStory, textComment, new Date())
-    Comment.addComment(Comment.getById(idComment), Comment.getById(commentToAdd.get))
-    val story = Story.getById(idStory)
-    println("LOS COMMENTS: " + Comment.getById(commentToAdd.get).getComments(Comment.getById(commentToAdd.get)))
 
-    Ok(views.html.story(story, commentForm))
+    val commentToReply: Comment = CommentDAO.getById(idComment)
+
+    val idCommentToAdd: Option[Long]= CommentDAO.create(Application.userLogin.get.username, commentToReply.story, textComment, new Date())
+
+
+    val commentToAdd = CommentDAO.getById(idCommentToAdd.get)
+
+    commentToReply.addComment(commentToAdd)
+
+    //println("LOS COMMENTS: " + CommentDAO.getById(commentToAdd.get).getComments(CommentDAO.getById(commentToAdd.get)))
+
+    Ok(views.html.story(StoryDAO.getById(commentToReply.story), commentForm))
   }
 
 }

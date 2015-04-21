@@ -22,18 +22,26 @@
 }
 
 
-<h1>    Comments: @story.getComments(story).size</h1>
+<h1>    Comments: @story.getComments().size</h1>
 
 <p>
 
-    @story.getComments(story).map { comment =>
+        @story.getComments().filter(c=> c.idParent.isEmpty).map { comment =>
+    <ul>
+        <li><h2> Replies: @comment.getComments().size</h2></li>
+        <li> Author: @comment.author  @comment.date </li>
+        <comment>@comment.text</comment> <br>
+        @comment.getComments().map{comment =>
         <ul>
-            <li><h2> Replies: @comment.getComments(comment).size</h2></li>
+            <li><h2> Replies: @comment.getComments().size</h2></li>
             <li> Author: @comment.author  @comment.date </li>
-             <comment>@comment.text</comment> <br>
-             <a href='@routes.StoryCtrl.comment(comment.id, story.id)'>Reply</a>
+            <comment>@comment.text</comment> <br>
+            <a href='@routes.StoryCtrl.comment(comment.id, story.id)'>Reply</a>
         </ul>
         }
+        <a href='@routes.StoryCtrl.comment(comment.id, story.id)'>Reply</a>
+    </ul>
+    }
 
 </p>
 }

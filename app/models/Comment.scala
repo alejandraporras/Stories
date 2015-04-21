@@ -8,18 +8,25 @@ import play.api.db.DB
 import play.api.Play.current
 
 case class Comment (id: Long, author: String, story: Long, text: String, date: Date,var idParent: Option[Long], var comments: List[Comment]){
-  def this(id: Long, author: String, story: Long, text: String, date: Date) = this(id, author, story, text, date, None, List())
-  def getComments(comment: Comment): List[Comment] ={
+  def this(id: Long, author: String, story: Long, text: String, date: Date, idParent: Option[Long]= None) = this(id, author, story, text, date, idParent, List())
+  def getComments(): List[Comment] ={
 
-    Comment.all.foreach(println(_))
-    Comment.all().filter(c => c.idParent.getOrElse(-1) == comment.id)
+    CommentDAO.all().filter(c => c.idParent.getOrElse(-1) == this.id)
   }
+  def addComment(comment: Comment): Unit ={
 
+    CommentDAO.update(comment.id, this.id)
+    comment.idParent = Some(this.id)
+    this.comments = this.comments.:+(comment)
+
+    comments.foreach(x=>  println("tengo este coment: " + x))
+
+  }
 
 
 }
 
-object Comment{
+object CommentDAO{
 
 
   def all(): List[Comment] = {
@@ -52,8 +59,8 @@ object Comment{
   }
 
   val comment= {
-    get[Long]("id") ~ get[String]("author") ~ get[Long]("story")~ get[String]("text") ~ get[Date]("data") map{
-      case id ~ author ~ story ~ text ~ data  => new Comment(id, author, story,text, data)
+    get[Long]("id") ~ get[String]("author") ~ get[Long]("story")~ get[String]("text") ~ get[Date]("data") ~get[Option[Long]]("idParent") map{
+      case id ~ author ~ story ~ text ~ data ~idParent => new Comment(id, author, story,text, data, idParent)
     }
   }
 
@@ -62,13 +69,6 @@ object Comment{
     comments.head
   }
 
-  def addComment(comment: Comment, commentToAdd: Comment): Unit ={
-    Comment.update(commentToAdd.id, comment.id)
 
-    commentToAdd.idParent = Some(comment.id)
-    comment.comments = comment.comments.:+(commentToAdd)
-
-    println("LOSC OMMENTs del comment: " + comment.text + " --- tiene como comments: " + comment.getComments(comment) )
-  }
 
 }

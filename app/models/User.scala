@@ -9,16 +9,29 @@ import anorm.SqlParser._
 case class User (username: String, password: String,var stories: List[Story]){
     def this(username: String, password: String) = this(username, password, List())
 
-    def getStories(user: User):List[Story] = {
-      Story.all.filter(s=> s.author == user.username)
+    def getStories():List[Story] = {
+      StoryDAO.all.filter(s=> s.author == this.username)
     }
 
-  def hasRated(user: User, story: Story): Boolean ={
-    StoryRated.exists(user,story)
+    def hasRated( story: Story): Boolean ={
+    StoryRatedDAO.exists(this,story)
+   }
+
+
+    def addStory(story: Story): Unit ={
+    this.stories = this.stories.:+(story)
+    }
+
+
+  def myStoriesRated(): List[StoryRated] ={
+    println("HISTORIAS PUNTUADAS POR: " + this.username)
+    StoryRatedDAO.getStoriesRatedOfUser(this)
+
   }
+
 }
 
-object User{
+object UserDAO{
 
 
   def all(): List[User] = DB.withConnection { implicit c =>
@@ -51,20 +64,5 @@ object User{
     users.filter(u => u.username == username).head
   }
 
-  def addStory(user: User, story: Story): Unit ={
-    user.stories = user.stories.:+(story)
-  }
-
-  def getStories(user: User):List[Story] = {
-    Story.all.filter(s=> s.author == user.username)
-
-
-  }
-
-  def myStoriesRated(user: User): List[StoryRated] ={
-    println("HISTORIAS PUNTUADAS POR: " + user.username)
-    StoryRated.storiesRatedOfUser(user)
-
-  }
 
 }

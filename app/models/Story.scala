@@ -8,12 +8,17 @@ import play.api.db.DB
 
 case class Story (id: Long, title: String,  author: String, text: String,var points: Integer, data: Date, var comments: List[Comment]){
   def this(id: Long, title: String,  author: String, text: String,  points: Integer, data: Date) = this(id, title, author, text, points, data, List())
-  def getComments(story: Story): List[Comment] ={
-    Comment.all().filter(comment => comment.story == story.id)
+
+  def getComments(): List[Comment] ={
+    CommentDAO.all().filter(comment => comment.story == this.id)
+  }
+
+  def addComment(comment: Comment): Unit ={
+    this.comments = comments.:+(comment)
   }
 }
 
-object Story{
+object StoryDAO{
 
 
   def all(): List[Story] = {
@@ -57,8 +62,5 @@ object Story{
 
   }
 
-  def addComment(user: User, story: Story, comment: Comment): Unit ={
-    story.comments = story.comments.:+(comment)
-  }
 
 }

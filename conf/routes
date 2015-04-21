@@ -27,7 +27,7 @@ POST    /storiesUpdated/:idStory             controllers.StoryCtrl.makeComment(i
 
 GET     /stories/:id               controllers.StoryCtrl.incrementPoints(id: Long)
 GET     /comment/:idC/:idS                controllers.StoryCtrl.comment(idC: Long, idS:Long)
-POST    /replyComment/:idC/:idS              controllers.StoryCtrl.replyComment(idC: Long, idS:Long)
+POST    /replyComment/:idC             controllers.StoryCtrl.replyComment(idC: Long)
 
 
 
