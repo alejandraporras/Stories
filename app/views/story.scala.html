@@ -31,15 +31,18 @@
         <li><h2> Replies: @comment.getComments().size</h2></li>
         <li> Author: @comment.author  @comment.date </li>
         <comment>@comment.text</comment> <br>
+        <a href='@routes.StoryCtrl.comment(comment.id, story.id)'>Reply</a>
+
         @comment.getComments().map{comment =>
         <ul>
             <li><h2> Replies: @comment.getComments().size</h2></li>
             <li> Author: @comment.author  @comment.date </li>
+            <li> Tengo comments?? @comment.hasComments() </li>
             <comment>@comment.text</comment> <br>
             <a href='@routes.StoryCtrl.comment(comment.id, story.id)'>Reply</a>
         </ul>
         }
-        <a href='@routes.StoryCtrl.comment(comment.id, story.id)'>Reply</a>
+
     </ul>
     }
 

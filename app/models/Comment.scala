@@ -23,6 +23,10 @@ case class Comment (id: Long, author: String, story: Long, text: String, date: D
 
   }
 
+  def hasComments():Boolean ={
+    getComments().size != 0
+  }
+
 
 }
 
